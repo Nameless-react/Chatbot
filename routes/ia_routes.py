@@ -1,17 +1,19 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Form
 from adapters.whatsapp_adapter import WhatsAppAdapter
-
-
+from ia_model.load_model import get_model_response
 
 router = APIRouter(prefix="/chat", tags=["Chat"])
 
-@router.get("/")
-async def receive_message():
+@router.post("/messages")
+async def receive_message(Body: str = Form()):
     whatsapp_adapter = WhatsAppAdapter()
-    response = whatsapp_adapter.send_message("+50683962643", "Hola")
-    # print(response.status_code)
-    # print(response.json())
-    return {"message": "Lista de usuarios"}
+   
+
+    model_response = get_model_response(Body)
+    print(model_response)
+    response = whatsapp_adapter.send_message("+50683962643", model_response)
+    
+    return {"message": model_response}
 
 
 @router.get("/{id_chat}")
