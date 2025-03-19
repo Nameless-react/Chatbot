@@ -1,4 +1,4 @@
-import ollama
+from ollama import Client
 import logging
 from pydantic import BaseModel
 from typing import Optional
@@ -7,13 +7,13 @@ logger = logging.getLogger(__name__)
 
 class ModelConfig(BaseModel):
     model_name: str = "llama3.1"
-    max_tokens: int = 300
+    max_tokens: int = 100
     temperature: float = 0.7
 
 
 
 
-def get_model_response(prompt: str, config: Optional[ModelConfig] = None) -> str:
+def get_model_response(prompt: str, config: Optional[ModelConfig] = ModelConfig()) -> str:
     """
     Generates the AI model's response.
 
@@ -27,13 +27,11 @@ def get_model_response(prompt: str, config: Optional[ModelConfig] = None) -> str
 
     if not prompt or prompt.strip() == "":
         raise ValueError("Prompt cannot be empty")
-        
-    if config is None:
-        config = ModelConfig()
     
     try:
+        client = Client(host="http://ollama:11434")
         logger.info(f"Requesting response from {config.model_name} model")
-        response = ollama.chat(
+        response = client.chat(
             model=config.model_name, 
             messages=[{
                 "role": "user",
