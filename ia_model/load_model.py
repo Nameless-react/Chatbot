@@ -32,6 +32,7 @@ def get_model_response(prompt: str, config: Optional[ModelConfig] = ModelConfig(
         "cuando sea necesario. Solo responderás preguntas relacionadas con IA, aprendizaje automático, "
         "procesamiento de lenguaje natural y programación en general. Si una consulta no está relacionada con estos temas, "
         "indica educadamente que solo puedes ayudar en temas de inteligencia artificial y desarrollo de software."
+        "Responde toda la consulta en 200 palabras o menos."
     )
     
     try:
